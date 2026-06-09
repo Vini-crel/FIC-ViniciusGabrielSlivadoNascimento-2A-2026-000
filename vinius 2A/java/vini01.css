@@ -6,108 +6,122 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2c3e50, #3498db);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .container {
     background: white;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    padding: 40px;
+    padding: 30px;
     width: 90%;
-    max-width: 450px;
+    max-width: 600px;
     text-align: center;
 }
 
-h2 {
-    color: #333;
-    margin-bottom: 25px;
+h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
     font-size: 1.8rem;
 }
 
-.nota-box {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-label {
-    font-size: 1.1rem;
+p {
     color: #555;
-    font-weight: 500;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
 }
 
-input {
-    padding: 12px 15px;
-    font-size: 1.1rem;
+.input-group {
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
     border: 2px solid #ddd;
     border-radius: 10px;
+    font-family: monospace;
+    resize: vertical;
     outline: none;
     transition: border-color 0.3s;
 }
 
-input:focus {
-    border-color: #764ba2;
+textarea:focus {
+    border-color: #3498db;
+}
+
+.botoes {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
 }
 
 button {
-    background: #764ba2;
+    background: #3498db;
     color: white;
     border: none;
-    padding: 12px;
-    font-size: 1.1rem;
-    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 30px;
     cursor: pointer;
     transition: background 0.3s, transform 0.1s;
     font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 button:hover {
-    background: #5a3a7a;
+    background: #2980b9;
 }
 
 button:active {
     transform: scale(0.97);
 }
 
-.resultado {
-    margin-top: 20px;
+button#btnLimpar {
+    background: #e74c3c;
+}
+
+button#btnLimpar:hover {
+    background: #c0392b;
+}
+
+.resultado-area {
+    background: #f8f9fa;
+    border-radius: 15px;
     padding: 15px;
+    margin-top: 10px;
+}
+
+.resultado-area h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.resultado-box {
+    background: white;
     border-radius: 10px;
-    font-size: 1.3rem;
+    padding: 15px;
+    font-size: 1.2rem;
+    font-family: monospace;
+    word-break: break-word;
+    border: 1px solid #ddd;
+    min-height: 70px;
+}
+
+.erro-msg {
+    margin-top: 15px;
+    color: #e74c3c;
     font-weight: bold;
-    background: #f5f5f5;
-    display: none;
-}
-
-.resultado.aprovado {
-    background: #d4edda;
-    color: #155724;
-    border-left: 5px solid #28a745;
-    display: block;
-}
-
-.resultado.recuperacao {
-    background: #fff3cd;
-    color: #856404;
-    border-left: 5px solid #ffc107;
-    display: block;
-}
-
-.resultado.reprovado {
-    background: #f8d7da;
-    color: #721c24;
-    border-left: 5px solid #dc3545;
-    display: block;
-}
-
-.resultado.erro {
-    background: #e2e3e5;
-    color: #383d41;
-    border-left: 5px solid #6c757d;
-    display: block;
+    font-size: 0.9rem;
 }
