@@ -1,0 +1,32 @@
+body {
+    font-family: Arial;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.calc {
+    display: inline-block;
+    background: #eee;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#display {
+    width: 200px;
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 1.5rem;
+    text-align: right;
+}
+
+button {
+    width: 45px;
+    height: 45px;
+    margin: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.clear {
+    background: #f66;
+}
