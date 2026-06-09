@@ -1,70 +1,56 @@
-const display = document.getElementById('display');
-let current = '0';
-let previous = '';
-let op = null;
+const notaInput = document.getElementById('nota');
+const verificarBtn = document.getElementById('verificarBtn');
+const resultadoDiv = document.getElementById('resultado');
 
-function updateDisplay() {
-    display.value = current;
-}
 
-function appendNumber(val) {
-    if (val === '.' && current.includes('.')) return;
-    if (current === '0' && val !== '.') current = val;
-    else current += val;
-    updateDisplay();
-}
+function verificarSituacao() {
 
-function setOperation(operator) {
-    if (previous !== '') calculate();
-    op = operator;
-    previous = current;
-    current = '0';
-}
+    let nota = parseFloat(notaInput.value);
+    
 
-function calculate() {
-    let a = parseFloat(previous);
-    let b = parseFloat(current);
-    if (isNaN(a) || isNaN(b)) return;
-    let res;
-    switch (op) {
-        case '+': res = a + b; break;
-        case '-': res = a - b; break;
-        case '*': res = a * b; break;
-        case '/': 
-            if (b === 0) { 
-                alert('Erro: divisão por zero'); 
-                clearAll(); 
-                return; 
-            }
-            res = a / b; 
-            break;
-        default: return;
+    if (isNaN(nota)) {
+        mostrarResultado('Por favor, digite um número válido.', 'erro');
+        return;
     }
-    current = res.toString();
-    op = null;
-    previous = '';
-    updateDisplay();
+    
+    if (nota < 0 || nota > 10) {
+        mostrarResultado('A nota deve estar entre 0 e 10.', 'erro');
+        return;
+    }
+    
+
+    let situacao = '';
+    let classe = '';
+    
+    if (nota >= 6) {
+        situacao = `✅ Aprovado! (Nota: ${nota.toFixed(1)})`;
+        classe = 'aprovado';
+    } else if (nota >= 1) {
+        situacao = `⚠️ Recuperação! (Nota: ${nota.toFixed(1)})`;
+        classe = 'recuperacao';
+    } else { 
+        situacao = `❌ Reprovado! (Nota: ${nota.toFixed(1)})`;
+        classe = 'reprovado';
+    }
+    
+    mostrarResultado(situacao, classe);
 }
 
-function clearAll() {
-    current = '0';
-    previous = '';
-    op = null;
-    updateDisplay();
+
+function mostrarResultado(mensagem, tipo) {
+    resultadoDiv.textContent = mensagem;
+
+    resultadoDiv.className = 'resultado';
+
+    resultadoDiv.classList.add(tipo);
 }
 
-document.querySelectorAll('.num').forEach(btn => {
-    btn.addEventListener('click', () => appendNumber(btn.innerText));
+
+verificarBtn.addEventListener('click', verificarSituacao);
+
+
+notaInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        verificarSituacao();
+    }
 });
-
-document.querySelectorAll('.op').forEach(btn => {
-    btn.addEventListener('click', () => setOperation(btn.innerText));
-});
-
-document.getElementById('equal').addEventListener('click', () => {
-    if (op && previous !== '') calculate();
-});
-
-document.getElementById('clear').addEventListener('click', clearAll);
-
-updateDisplay();
