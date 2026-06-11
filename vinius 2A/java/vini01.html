@@ -1,35 +1,45 @@
-HTML:
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordenar Ordens - Ordenador de Números</title>
+    <title>Boca de Urna - Simulação de Voto</title>
     <link rel="stylesheet" href="vini01.css">
 </head>
 <body>
-    <div class="container">
-        <h1>📊 Ordenar Ordens</h1>
-        <p>Digite os números separados por vírgula (ex: 5, 2, 9, 1, 7)</p>
-        
-        <div class="input-group">
-            <textarea id="valores" placeholder="Exemplo: 10, 3, 8, 2, 5" rows="3"></textarea>
+    <div class="urna-container">
+        <h1>🗳️ Boca de Urna</h1>
+        <p>Simulação de votação com validação por idade</p>
+
+
+        <div class="secao">
+            <label for="faixaIdade">Selecione sua faixa etária:</label>
+            <select id="faixaIdade">
+                <option value="menor">Menor de 16 anos (não vota)</option>
+                <option value="16-17">16 a 17 anos (voto facultativo)</option>
+                <option value="18-70">18 a 70 anos (voto obrigatório)</option>
+                <option value="maior70">Acima de 70 anos (voto facultativo)</option>
+            </select>
+            <div id="statusIdade" class="status-msg"></div>
         </div>
-        
-        <div class="botoes">
-            <button id="btnCrescente">📈 Ordenar Crescente</button>
-            <button id="btnDecrescente">📉 Ordenar Decrescente</button>
-            <button id="btnLimpar">🗑️ Limpar</button>
+
+
+        <div class="secao votacao-area" id="votacaoArea" style="display: none;">
+            <hr>
+            <h3>⚡ Seu momento de votar</h3>
+            <p>Para confirmar seu voto, digite o número <strong>80</strong> (candidato 80).</p>
+            <div class="input-group">
+                <input type="number" id="numeroVoto" placeholder="Digite 80" min="0" step="1">
+                <button id="btnVotar">🗳️ Confirmar Voto</button>
+            </div>
+            <div id="feedbackVoto" class="feedback"></div>
+            <button id="btnResetar" class="resetar">🔄 Nova Votação</button>
         </div>
-        
-        <div class="resultado-area">
-            <h3>Resultado ordenado:</h3>
-            <div id="resultado" class="resultado-box">---</div>
-        </div>
-        
-        <div id="erro" class="erro-msg"></div>
+
+
+        <button id="btnIniciar" class="iniciar">📢 Iniciar Votação</button>
     </div>
-    
+
     <script src="vini01.js"></script>
 </body>
 </html>

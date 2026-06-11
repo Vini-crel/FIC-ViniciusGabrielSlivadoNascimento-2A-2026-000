@@ -1,88 +1,136 @@
-const valoresTextarea = document.getElementById('valores');
-const btnCrescente = document.getElementById('btnCrescente');
-const btnDecrescente = document.getElementById('btnDecrescente');
-const btnLimpar = document.getElementById('btnLimpar');
-const resultadoDiv = document.getElementById('resultado');
-const erroDiv = document.getElementById('erro');
+const faixaIdadeSelect = document.getElementById('faixaIdade');
+const statusIdadeDiv = document.getElementById('statusIdade');
+const votacaoArea = document.getElementById('votacaoArea');
+const btnIniciar = document.getElementById('btnIniciar');
+const btnVotar = document.getElementById('btnVotar');
+const numeroVotoInput = document.getElementById('numeroVoto');
+const feedbackVotoDiv = document.getElementById('feedbackVoto');
+const btnResetar = document.getElementById('btnResetar');
 
 
-function limparErro() {
-    erroDiv.textContent = '';
+let votacaoAtiva = false;
+
+
+function atualizarStatusIdade() {
+    const opcao = faixaIdadeSelect.value;
+    let mensagem = '';
+
+   
+    switch (opcao) {
+        case 'menor':
+            mensagem = '🚫 Você NÃO pode votar. Menor de 16 anos.';
+            break;
+        case '16-17':
+            mensagem = '📢 Voto FACULTATIVO (16 a 17 anos). Você pode votar, mas não é obrigatório.';
+            break;
+        case '18-70':
+            mensagem = '✅ Voto OBRIGATÓRIO (18 a 70 anos). Você deve votar!';
+            break;
+        case 'maior70':
+            mensagem = '👴 Voto FACULTATIVO (acima de 70 anos). Você pode votar.';
+            break;
+        default:
+            mensagem = 'Selecione uma faixa etária.';
+    }
+    statusIdadeDiv.textContent = mensagem;
 }
 
 
-function exibirErro(mensagem) {
-    erroDiv.textContent = mensagem;
-    resultadoDiv.textContent = '---';
+function podeVotar() {
+    const opcao = faixaIdadeSelect.value;
+    return (opcao !== 'menor'); 
 }
 
 
-function extrairNumeros() {
-    const texto = valoresTextarea.value.trim();
-    if (texto === '') {
-        exibirErro('❌ Nenhum número digitado. Insira valores separados por vírgula.');
-        return null;
+function iniciarVotacao() {
+    if (!podeVotar()) {
+        feedbackVotoDiv.className = 'feedback erro';
+        feedbackVotoDiv.textContent = '❌ Você não tem permissão para votar. Selecione uma idade válida.';
+        votacaoArea.style.display = 'none';
+        return;
     }
-    
 
-    const partes = texto.split(',').map(part => part.trim());
-    const numeros = [];
+
+    votacaoArea.style.display = 'block';
+    feedbackVotoDiv.innerHTML = '';
+    numeroVotoInput.value = '';
+    votacaoAtiva = true; 
+
+
+    faixaIdadeSelect.disabled = true;
+    btnIniciar.disabled = true;
     
-    for (let i = 0; i < partes.length; i++) {
-        const valor = parseFloat(partes[i]);
-        if (isNaN(valor)) {
-            exibirErro(`❌ Valor inválido: "${partes[i]}". Use apenas números e vírgulas.`);
-            return null;
-        }
-        numeros.push(valor);
-    }
     
-    if (numeros.length === 0) {
-        exibirErro('❌ Nenhum número válido encontrado.');
-        return null;
-    }
+    feedbackVotoDiv.className = 'feedback info';
+    feedbackVotoDiv.textContent = '🎯 Votação iniciada! Digite o número 80 e clique em "Confirmar Voto".';
     
-    limparErro();
-    return numeros;
+    
+    numeroVotoInput.focus();
 }
 
 
-function ordenar(decrescente = false) {
-    const numeros = extrairNumeros();
-    if (!numeros) return;
-    
-    const ordenados = [...numeros];
-    
-    if (decrescente) {
-        ordenados.sort((a, b) => b - a);
-    } else {
-        ordenados.sort((a, b) => a - b);
+function processarVoto() {
+    if (!votacaoAtiva) {
+        feedbackVotoDiv.className = 'feedback erro';
+        feedbackVotoDiv.textContent = '⚠️ A votação não está ativa. Clique em "Iniciar Votação".';
+        return;
     }
-    
 
-    const resultadoTexto = ordenados.join(' → ');
-    resultadoDiv.textContent = resultadoTexto;
+    const voto = parseInt(numeroVotoInput.value);
     
+   
+    if (voto === 80) {
+        
+        feedbackVotoDiv.className = 'feedback sucesso';
+        feedbackVotoDiv.innerHTML = '✅ **VOTO COMPUTADO COM SUCESSO!**<br>Você votou no candidato 80. Obrigado pela participação.';
+        
+        votacaoAtiva = false;
+        
+        numeroVotoInput.disabled = true;
+        btnVotar.disabled = true;
 
-    if (decrescente) {
-        resultadoDiv.style.borderLeft = '5px solid #e67e22';
-    } else {
-        resultadoDiv.style.borderLeft = '5px solid #2ecc71';
+    } 
+    else if (isNaN(voto)) {
+        feedbackVotoDiv.className = 'feedback erro';
+        feedbackVotoDiv.textContent = '❗ Número inválido. Digite o número 80 para confirmar seu voto.';
+
+        numeroVotoInput.value = '';
+        numeroVotoInput.focus();
+    }
+    else {
+
+        feedbackVotoDiv.className = 'feedback erro';
+        feedbackVotoDiv.textContent = `❌ Você digitou ${voto}. Para confirmar, é necessário digitar o número 80. Tente novamente.`;
+        numeroVotoInput.value = '';
+        numeroVotoInput.focus();
     }
 }
 
 
-btnCrescente.addEventListener('click', () => ordenar(false));
-btnDecrescente.addEventListener('click', () => ordenar(true));
-btnLimpar.addEventListener('click', () => {
-    valoresTextarea.value = '';
-    resultadoDiv.textContent = '---';
-    limparErro();
-    resultadoDiv.style.borderLeft = '1px solid #ddd';
-});
+function resetarVotacao() {
+
+    faixaIdadeSelect.disabled = false;
+    btnIniciar.disabled = false;
+
+    votacaoArea.style.display = 'none';
 
 
-window.addEventListener('load', () => {
-    valoresTextarea.value = '5, 2, 9, 1, 7, 3';
-    ordenar(false);
-});
+    feedbackVotoDiv.className = '';
+    feedbackVotoDiv.textContent = '';
+
+    numeroVotoInput.disabled = false;
+    btnVotar.disabled = false;
+    numeroVotoInput.value = '';
+    votacaoAtiva = false;
+
+    atualizarStatusIdade();
+}
+
+
+faixaIdadeSelect.addEventListener('change', atualizarStatusIdade);
+btnIniciar.addEventListener('click', iniciarVotacao);
+btnVotar.addEventListener('click', processarVoto);
+btnResetar.addEventListener('click', resetarVotacao);
+
+
+atualizarStatusIdade();
